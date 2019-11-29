@@ -66,127 +66,117 @@ contract LandRegistration =
   
     `;
 
-
-const contractAddress = 'ct_qZUCTGGB3Hij1ZJT42XWSDanR1sUACY4d9CxidLbE17HC6Mnw';
+const contractAddress = "ct_qZUCTGGB3Hij1ZJT42XWSDanR1sUACY4d9CxidLbE17HC6Mnw";
 var LandArray = [];
 var client = null;
 var LandLength = 0;
 
-
 function renderLand() {
-    
-    var template = $('#template').html();
+  var template = $("#template").html();
 
-    Mustache.parse(template);
-    var rendered = Mustache.render(template, {
-        LandArray
-    });
+  Mustache.parse(template);
+  var rendered = Mustache.render(template, {
+    LandArray
+  });
 
-
-
-
-    $('#body').html(rendered);
-    console.log("for loop reached")
+  $("#body").html(rendered);
+  console.log("for loop reached");
 }
 //Create a asynchronous read call for our smart contract
 async function callStatic(func, args) {
-    //Create a new contract instance that we can interact with
-    const contract = await client.getContractInstance(contractSource, {
-        contractAddress
-    });
-    //Make a call to get data of smart contract func, with specefied arguments
-    console.log("Contract : ", contract)
-    const calledGet = await contract.call(func, args, {
-        callStatic: true
-    }).catch(e => console.error(e));
-    //Make another call to decode the data received in first call
-    console.log("Called get found: ", calledGet)
-    const decodedGet = await calledGet.decode().catch(e => console.error(e));
-    console.log("catching errors : ", decodedGet)
-    return decodedGet;
+  //Create a new contract instance that we can interact with
+  const contract = await client.getContractInstance(contractSource, {
+    contractAddress
+  });
+  //Make a call to get data of smart contract func, with specefied arguments
+  console.log("Contract : ", contract);
+  const calledGet = await contract
+    .call(func, args, {
+      callStatic: true
+    })
+    .catch(e => console.error(e));
+  //Make another call to decode the data received in first call
+  console.log("Called get found: ", calledGet);
+  const decodedGet = await calledGet.decode().catch(e => console.error(e));
+  console.log("catching errors : ", decodedGet);
+  return decodedGet;
 }
 
 async function contractCall(func, args, value) {
-    const contract = await client.getContractInstance(contractSource, {
-        contractAddress
-    });
-    //Make a call to write smart contract func, with aeon value input
-    const calledSet = await contract.call(func, args, {
-        amount: value
-    }).catch(e => console.error(e));
+  const contract = await client.getContractInstance(contractSource, {
+    contractAddress
+  });
+  //Make a call to write smart contract func, with aeon value input
+  const calledSet = await contract
+    .call(func, args, {
+      amount: value
+    })
+    .catch(e => console.error(e));
 
-    return calledSet;
+  return calledSet;
 }
 
 // Shows the register Form
-$('#newregister').click(async function(){
-  $('#formbody').show();
-})
-
-
-
-
-window.addEventListener('DOMContentLoaded', async () => {
-
-
-  $('#formBody').hide();
-    
-    $("#loading-bar-spinner").show();
-
-    client = await Ae.Aepp()
-
-    LandLength = await callStatic('getLandLength', []);
-
-
-    for (let i = 1; i <= LandLength; i++) {
-        const property = await callStatic('getLand', [i]);
-
-        console.log("for loop reached", "pushing to array")
-
-        console.log(property.name)
-        console.log(property.description)
-        console.log(property.image1)
-
-
-        LandArray.push({
-            id: property.id,
-            creatorAddress: property.creatorAddress,
-            image1: property.image1,
-            image2: property.image2,
-
-
-            name: property.name,
-            description: property.description,
-            price: property.price
-        })
-
-
-        renderLand();
-
-
-        $('#formBody').show();
-
-        $("#loading-bar-spinner").hide();
-    }
+$("#newregister").click(async function() {
+  $("#formbody").show();
 });
 
+window.addEventListener("DOMContentLoaded", async () => {
+  $("#formBody").hide();
 
-$('.regBtns').click(async function(){
   $("#loading-bar-spinner").show();
-  console.log("Button Clicked")
-  const land_name = ($('#Regname').val());
-  const land_image1 = ($("#Regimg").val());
-  const land_image2 = ($("#Regimg2").val());
-  const land_price = ($("#Regprice").val());
-  const land_description = ($("#Regdescription").val());
-  console.log("-------------------------------------")
-  console.log("Name:",land_name)
-  console.log("image1:",land_image1)
-  console.log("Image2:",land_image2)
-  
 
-  const new_land = await contractCall('createLand', [land_image1, land_image2, land_name,land_description, land_price],parseInt(land_price, 10));
-  console.log("SAVED TO THE DB", new_land)
+  client = await Ae.Aepp();
+
+  LandLength = await callStatic("getLandLength", []);
+
+  for (let i = 1; i <= LandLength; i++) {
+    const property = await callStatic("getLand", [i]);
+
+    console.log("for loop reached", "pushing to array");
+
+    console.log(property.name);
+    console.log(property.description);
+    console.log(property.image1);
+
+    LandArray.push({
+      id: property.id,
+      creatorAddress: property.creatorAddress,
+      image1: property.image1,
+      image2: property.image2,
+
+      name: property.name,
+      description: property.description,
+      price: property.price
+    });
+
+    renderLand();
+
+    $("#formBody").show();
+
+    $("#loading-bar-spinner").hide();
+  }
+});
+
+$(".regBtns").click(async function() {
+  $("#loading-bar-spinner").show();
+  console.log("Button Clicked");
+  const land_name = $("#Regname").val();
+  const land_image1 = $("#Regimg").val();
+  const land_image2 = $("#Regimg2").val();
+  const land_price = $("#Regprice").val();
+  const land_description = $("#Regdescription").val();
+  console.log("-------------------------------------");
+  console.log("Name:", land_name);
+  console.log("image1:", land_image1);
+  console.log("Image2:", land_image2);
+
+  const new_land = await contractCall(
+    "createLand",
+    [land_image1, land_image2, land_name, land_description, land_price],
+    parseInt(land_price, 10)
+  );
+  console.log("SAVED TO THE DB", new_land);
 
   LandArray.push({
     id: LandArray.length + 1,
@@ -196,11 +186,18 @@ $('.regBtns').click(async function(){
     name: new_land.name,
     description: new_land.description,
     price: new_land.price
-  })
-
+  });
 
   renderLand();
-  
+
+  var map;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("maps"), {
+      center: { lat: -34.397, lng: 150.644 },
+      zoom: 8
+    });
+  }
+
   //   //This will clear the value in all scenarious
   //   var name_input = document.getElementById("name")
   //       name_input.value =""
@@ -216,6 +213,4 @@ $('.regBtns').click(async function(){
 
   $("#loading-bar-spinner").hide();
   location.reload(true);
-
 });
-
