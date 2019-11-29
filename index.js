@@ -116,15 +116,15 @@ async function contractCall(func, args, value) {
   return calledSet;
 }
 
-// Shows the register Form
+// fadeIns the register Form
 $("#newregister").click(async function() {
-  $("#formbody").show();
+  $("#formbody").fadeIn();
 });
 
 window.addEventListener("DOMContentLoaded", async () => {
   $("#formBody").hide();
 
-  $("#loading-bar-spinner").show();
+  $("#loading").fadeIn();
 
   client = await Ae.Aepp();
 
@@ -154,12 +154,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     $("#formBody").show();
 
-    $("#loading-bar-spinner").hide();
+    $("#loading").fadeOut();
   }
 });
 
 $(".regBtns").click(async function() {
-  $("#loading-bar-spinner").show();
+  $("#loading").fadeIn();
   console.log("Button Clicked");
   const land_name = $("#Regname").val();
   const land_image1 = $("#Regimg").val();
@@ -211,6 +211,6 @@ $(".regBtns").click(async function() {
   //      image_input.value = ""
   // // e.preventDefault();
 
-  $("#loading-bar-spinner").hide();
+  $("#loading").fadeOut();
   location.reload(true);
 });
