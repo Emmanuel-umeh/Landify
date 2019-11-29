@@ -152,7 +152,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     renderLand();
 
-    $("#formBody").show();
+    // $("#formBody").show();
 
     $("#loading").fadeOut();
   }
@@ -190,14 +190,6 @@ $(".regBtns").click(async function() {
 
   renderLand();
 
-  var map;
-  function initMap() {
-    map = new google.maps.Map(document.getElementById("maps"), {
-      center: { lat: -34.397, lng: 150.644 },
-      zoom: 8
-    });
-  }
-
   //   //This will clear the value in all scenarious
   //   var name_input = document.getElementById("name")
   //       name_input.value =""
@@ -214,3 +206,11 @@ $(".regBtns").click(async function() {
   $("#loading").fadeOut();
   location.reload(true);
 });
+
+var map;
+function initMap() {
+  map = new google.maps.Map(document.getElementById("maps"), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8
+  });
+}
